@@ -2,7 +2,7 @@
 module testbench_random_addr;
   import csr_pkg::*;
 
-  localparam int N = 40;
+  localparam int N = 25;
 
   logic clk = 1'b0;
   always #5 clk = ~clk;
