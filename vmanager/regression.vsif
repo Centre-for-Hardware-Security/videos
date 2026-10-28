@@ -1,0 +1,14 @@
+session generic_csr_regr {
+    top_dir     : $ENV(PWD)/regr;
+    output_mode : terminal;
+};
+
+group csr_tests {
+    scan_script : "vm_scan.pl ius.flt shell.flt";
+
+    test random_addr {
+        run_script : "xrun -sv /scratch/vmanager/run/csr_pkg.sv /scratch/vmanager/run/csr_if.sv /scratch/vmanager/run/generic_csr.sv /scratch/vmanager/run/testbench_random_addr.sv -coverage all -covoverwrite -svseed random";
+        count      : 7;
+    };
+
+};
