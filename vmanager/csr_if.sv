@@ -24,6 +24,6 @@ interface csr_if #(
 
   a_we_re_exclusive: assert property (@(posedge clk)
     !(write_enable && read_enable))
-    else $error("write_enable and read_enable assserted!");
+    else $error("write_enable and read_enable asserted!");
 
 endinterface : csr_if
