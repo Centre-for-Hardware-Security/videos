@@ -25,11 +25,20 @@ module testbench_valid;
   logic [1:0] burst = BURST_SHORT;
   logic [1:0] enc   = ENC_PLAIN;
 
+  // last values written on the interface
+  logic [1:0] obs_burst, obs_enc;
+
+  always @(bus.mon_cb)
+    if (bus.mon_cb.chip_enable && bus.mon_cb.write_enable) begin
+      if (bus.mon_cb.address == ADDR_BURST_LEN) obs_burst <= bus.mon_cb.data_in[1:0];
+      if (bus.mon_cb.address == ADDR_ENC_MODE)  obs_enc   <= bus.mon_cb.data_in[1:0];
+    end
+
   covergroup cg_modes @(posedge clk);
-    cp_burst : coverpoint dut.burst_len_q iff (bus.rst_n) {
+    cp_burst : coverpoint obs_burst iff (bus.rst_n) {
       bins valid[] = {BURST_SHORT, BURST_AVERAGE, BURST_LONG};
     }
-    cp_enc : coverpoint dut.enc_mode_q iff (bus.rst_n) {
+    cp_enc : coverpoint obs_enc iff (bus.rst_n) {
       bins valid[] = {ENC_PLAIN, ENC_HASH, ENC_ECC};
     }
     x_modes : cross cp_burst, cp_enc;
